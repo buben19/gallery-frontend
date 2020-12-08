@@ -1,2 +1,2 @@
 #!/bin/sh
-exec docker build -t ng .
+exec docker build -t gallery-frontend .

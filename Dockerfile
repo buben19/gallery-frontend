@@ -1,10 +1,8 @@
-FROM node:alpine
+FROM nginx
 MAINTAINER Ivo Slanina <ivo.slanina@gmail.com>
 
-EXPOSE 4200
+EXPOSE 80
 WORKDIR /app
 
-CMD ["ng"]
-
-# Install Angular CLI
-RUN npm install -g @angular/cli@10
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY dist/gallery-frontened /app
