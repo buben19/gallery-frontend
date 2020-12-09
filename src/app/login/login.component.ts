@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { LoginRequest } from '../data/login-request.payload';
+import { AuthenticationService } from '../shared/authentication.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -7,9 +12,37 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  loginForm: FormGroup;
+  loginRequest: LoginRequest;
+  isError: boolean;
 
-  ngOnInit(): void {
+  constructor(
+        private authenticationService: AuthenticationService, 
+        private activatedRoute: ActivatedRoute,
+        private router: Router) {
+    this.loginRequest = {
+      username: '',
+      password: ''
+    };
   }
 
+  ngOnInit(): void {
+    this.loginForm = new FormGroup({
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required)
+    });
+  }
+
+  login(): void {
+    this.loginRequest.username = this.loginForm.get('username').value;
+    this.loginRequest.password = this.loginForm.get('password').value;
+
+    this.authenticationService.login(this.loginRequest).subscribe(data => {
+      this.isError = false;
+      this.router.navigateByUrl('');
+    }, error => {
+      this.isError = true;
+      throwError(error);
+    });
+  }
 }

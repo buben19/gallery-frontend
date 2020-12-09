@@ -1,1 +1,7 @@
-<p>login works!</p>
+<form [formGroup]="loginForm" (ngSubmit)="login()">
+    <input type="text" id="user-name" class="form-control" [formControlName]="'username'" name="user-name" required autofocus>
+    <input type="password" id="user-password" class="form-control" [formControlName]="'password'" name="user-password" required>
+    <button type="submit" class="btn btn-primary">
+        Login
+    </button>
+</form>
