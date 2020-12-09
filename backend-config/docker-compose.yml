@@ -1,0 +1,63 @@
+version: "3.8"
+services:
+    backend:
+        image: gallery-backend:0.0.1-SNAPSHOT
+        links:
+            - postgres
+        depends_on:
+            - postgres
+        volumes:
+            - ./application.properties:/workspace/application.properties:ro
+
+    frontend:
+        image: ng
+        command: ng serve --host=0.0.0.0 --proxy-config=./backend-config/proxy.conf.json
+        links:
+            - backend
+        depends_on:
+            - backend
+        volumes:
+            - ..:/app:ro
+        ports:
+            - "4200:4200"
+
+    postgres:
+        image: postgres
+        restart: always
+        expose:
+            - "5432"
+        environment:
+            POSTGRES_PASSWORD: password
+    pgadmin:
+        image: fenglc/pgadmin4
+        restart: always
+        ports:
+            - "5050:5050"
+        links:
+            - postgres
+        environment:
+            - DEFAULT_USER=postgres@example.com
+            - DEFAULT_PASSWORD=password
+    prometheus:
+        image: prom/prometheus
+        restart: always
+        ports:
+            - "9090:9090"
+        links:
+            - backend
+        command:
+            - --config.file=/etc/prometheus/prometheus.yml
+        volumes:
+            - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+        depends_on:
+            - backend
+    # TODO: Grafana configuration
+    grafana:
+        image: grafana/grafana
+        restart: always
+        ports:
+            - "3000:3000"
+        links:
+            - prometheus
+        depends_on:
+            - prometheus
