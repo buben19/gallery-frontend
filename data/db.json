@@ -20,5 +20,12 @@
     }, {  
         "id": 6,  
         "title": "Angular 8"
-    }]  
+    }],
+    "users": [
+        {
+            "id": 1,
+            "login": "admin",
+            "password": "admin"
+        }
+    ]
 }
