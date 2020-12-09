@@ -1,5 +1,5 @@
 FROM nginx
-MAINTAINER Ivo Slanina <ivo.slanina@gmail.com>
+LABEL maintainere="Ivo Slanina <ivo.slanina@gmail.com>"
 
 EXPOSE 80
 WORKDIR /app
