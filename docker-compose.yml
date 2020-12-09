@@ -1,0 +1,22 @@
+# Docker compose file which start development server and json-server for faking backend.
+version: "3.8"
+services:
+    web:
+        image: ng
+        command: npm run start
+        links:
+            - json-server
+        depends_on:
+            - json-server
+        volumes:
+            - .:/app:ro
+        ports:
+            - "4200:4200"
+
+    json-server:
+        image: ng
+        command: npm run json-server
+        restart: always
+        volumes:
+            - .:/app
+        

@@ -1,0 +1,24 @@
+{
+    "images": [{  
+        "id": 1,  
+        "title": "AngularJS (1.0.0)"
+    }, {  
+        "id": 2,  
+        "title": "Angular 2"
+    }, {  
+        "id": 3,  
+        "title": "Angular 4"
+    }, {  
+        "id": 4,  
+        "title": "Angular 5"
+    }, {  
+        "id": 5,  
+        "title": "Angular 6"
+    }, {  
+        "id": 6,  
+        "title": "Angular 7"
+    }, {  
+        "id": 6,  
+        "title": "Angular 8"
+    }]  
+}
