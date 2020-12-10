@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private router: Router) {
     this.loginRequest = {
-      login: '',
+      username: '',
       password: ''
     };
   }
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    this.loginRequest.login = this.loginForm.get('username').value;
+    this.loginRequest.username = this.loginForm.get('username').value;
     this.loginRequest.password = this.loginForm.get('password').value;
 
     this.authenticationService.login(this.loginRequest).subscribe(data => {
