@@ -20,6 +20,11 @@ export class AuthenticationService {
     username: this.getUserName()
   }
 
+  constructor(
+        private httpClient: HttpClient,
+        private localStorage: LocalStorageService) {
+  }
+
   getUserName(): string {
     return this.localStorage.retrieve('username');
   }
@@ -28,9 +33,12 @@ export class AuthenticationService {
     return this.localStorage.retrieve('refreshToken');
   }
 
-  constructor(
-        private httpClient: HttpClient,
-        private localStorage: LocalStorageService) {
+  getJwtToken() {
+    return this.localStorage.retrieve('authenticationToken');
+  }
+
+  isLoggedIn(): boolean {
+    return this.getJwtToken() != null;
   }
 
   signup(signupRequestPayload: SignupRequest): Observable<any> {
@@ -43,6 +51,8 @@ export class AuthenticationService {
         this.localStorage.store('username', data.username);
         this.localStorage.store('refreshToken', data.refreshToken);
         this.localStorage.store('expiresAt', data.expiresAt);
+        this.localStorage.store('roles', data.roles);
+        this.localStorage.store('privileges', data.privileges);
 
         this.loggedIn.emit(true);
         this.username.emit(data.username);
@@ -61,15 +71,18 @@ export class AuthenticationService {
     this.localStorage.clear('username');
     this.localStorage.clear('refreshToken');
     this.localStorage.clear('expiresAt');
+    this.localStorage.clear('roles');
+    this.localStorage.clear('privileges');
   }
 
   refresh(): Observable<any> {
-    return this.httpClient.post<LoginResponse>('api/auth/refresh/token', this.refreshToken)
-      .pipe(tap(response => {
+    return this.httpClient.post<LoginResponse>('api/auth/refresh', this.refreshToken).pipe(tap(data => {
         this.localStorage.clear('authenticationToken');
         this.localStorage.clear('expiresAt');
-        this.localStorage.store('authenticationToken', response.authenticationToken);
-        this.localStorage.store('expiresAt', response.expiresAt);
+        this.localStorage.store('authenticationToken', data.authenticationToken);
+        this.localStorage.store('expiresAt', data.expiresAt);
+        this.localStorage.store('roles', data.roles);
+        this.localStorage.store('privileges', data.privileges);
       }));
   }
 }
