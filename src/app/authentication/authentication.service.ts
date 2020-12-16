@@ -6,6 +6,7 @@ import { LoginRequest } from '../data/login-request.payload';
 import { LoginResponse } from '../data/login-response.payload';
 import { SignupRequest } from '../data/signup-request.payload';
 import { map, tap } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,6 @@ export class AuthenticationService {
   @Output() privileges: EventEmitter<string[]> = new EventEmitter();
 
   refreshToken = {
-    refreshToken: this.getRefreshToken(),
     username: this.getUsername()
   }
 
@@ -31,10 +31,6 @@ export class AuthenticationService {
     return this.localStorage.retrieve('username');
   }
 
-  getRefreshToken(): string {
-    return this.localStorage.retrieve('refreshToken');
-  }
-
   getJwtToken() {
     return this.localStorage.retrieve('authenticationToken');
   }
@@ -44,7 +40,8 @@ export class AuthenticationService {
   }
 
   hasRole(role: string): boolean {
-    return this.localStorage.retrieve('roles').indexOf(role) > -1;
+    const roles = this.localStorage.retrieve('roles');
+    return roles ? roles.indexOf(role) > -1 : false;
   }
 
   signup(signupRequestPayload: SignupRequest): Observable<any> {
@@ -53,17 +50,18 @@ export class AuthenticationService {
 
   login(loginRequest: LoginRequest): Observable<boolean> {
     return this.httpClient.post<LoginResponse>('api/auth/login', loginRequest).pipe(map(data => {
-        this.localStorage.store('authenticationToken', data.authenticationToken);
-        this.localStorage.store('username', data.username);
-        this.localStorage.store('refreshToken', data.refreshToken);
-        this.localStorage.store('expiresAt', data.expiresAt);
-        this.localStorage.store('roles', data.roles);
-        this.localStorage.store('privileges', data.privileges);
+      const helper = new JwtHelperService();
+      const decoded = helper.decodeToken(data.jwt);
 
+        this.localStorage.store('jwt', data.jwt);
+        this.localStorage.store('username', decoded.name);
+        this.localStorage.store('roles', decoded.roles);
+        this.localStorage.store('privileges', decoded.privileges);
+       
         this.loggedIn.emit(true);
-        this.username.emit(data.username);
-        this.roles.emit(data.roles);
-        this.privileges.emit(data.privileges)
+        this.username.emit(decoded.name);
+        this.roles.emit(decoded.roles);
+        this.privileges.emit(decoded.privileges)
         return true;
       }));
   }
@@ -75,20 +73,16 @@ export class AuthenticationService {
       }, error => {
         throwError(error);
       })
-    this.localStorage.clear('authenticationToken');
+    this.localStorage.clear('jwt');
     this.localStorage.clear('username');
-    this.localStorage.clear('refreshToken');
-    this.localStorage.clear('expiresAt');
     this.localStorage.clear('roles');
     this.localStorage.clear('privileges');
   }
 
   refresh(): Observable<any> {
     return this.httpClient.post<LoginResponse>('api/auth/refresh', this.refreshToken).pipe(tap(data => {
-        this.localStorage.clear('authenticationToken');
-        this.localStorage.clear('expiresAt');
-        this.localStorage.store('authenticationToken', data.authenticationToken);
-        this.localStorage.store('expiresAt', data.expiresAt);
+        this.localStorage.clear('jwt');
+        this.localStorage.clear('username');
         this.localStorage.store('roles', data.roles);
         this.localStorage.store('privileges', data.privileges);
       }));

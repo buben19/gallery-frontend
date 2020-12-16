@@ -10,6 +10,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { TokenInterceptor } from './token-interceptor';
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
+import { JwtModule } from '@auth0/angular-jwt';
+
+export function tokenGetter(): string {
+  return localStorage.getJwtToken();
+}
 
 @NgModule({
   declarations: [
