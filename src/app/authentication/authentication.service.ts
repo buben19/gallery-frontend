@@ -14,10 +14,12 @@ export class AuthenticationService {
 
   @Output() loggedIn: EventEmitter<boolean> = new EventEmitter();
   @Output() username: EventEmitter<string> = new EventEmitter();
+  @Output() roles: EventEmitter<string[]> = new EventEmitter();
+  @Output() privileges: EventEmitter<string[]> = new EventEmitter();
 
   refreshToken = {
     refreshToken: this.getRefreshToken(),
-    username: this.getUserName()
+    username: this.getUsername()
   }
 
   constructor(
@@ -25,7 +27,7 @@ export class AuthenticationService {
         private localStorage: LocalStorageService) {
   }
 
-  getUserName(): string {
+  getUsername(): string {
     return this.localStorage.retrieve('username');
   }
 
@@ -39,6 +41,10 @@ export class AuthenticationService {
 
   isLoggedIn(): boolean {
     return this.getJwtToken() != null;
+  }
+
+  hasRole(role: string): boolean {
+    return this.localStorage.retrieve('roles').indexOf(role) > -1;
   }
 
   signup(signupRequestPayload: SignupRequest): Observable<any> {
@@ -56,6 +62,8 @@ export class AuthenticationService {
 
         this.loggedIn.emit(true);
         this.username.emit(data.username);
+        this.roles.emit(data.roles);
+        this.privileges.emit(data.privileges)
         return true;
       }));
   }
