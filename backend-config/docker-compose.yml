@@ -30,15 +30,18 @@ services:
         environment:
             POSTGRES_PASSWORD: password
     pgadmin:
-        image: fenglc/pgadmin4
+        image: dpage/pgadmin4
         restart: always
         ports:
             - "5050:5050"
         links:
             - postgres
         environment:
-            - DEFAULT_USER=postgres@example.com
-            - DEFAULT_PASSWORD=password
+            - PGADMIN_DEFAULT_EMAIL=postgres@example.com
+            - PGADMIN_DEFAULT_PASSWORD=password
+            - PGADMIN_LISTEN_PORT=5050
+        volumes:
+            - ./servers.json:/pgadmin4/servers.json
     prometheus:
         image: prom/prometheus
         restart: always
