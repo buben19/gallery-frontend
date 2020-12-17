@@ -79,27 +79,37 @@ export class AuthenticationService {
   }
 
   logout(): void {
-    //this.httpClient.post('api/auth/logout', this.refreshToken, { responseType: 'text' })
-    //  .subscribe(data => {
-    //    console.log(data);
-    //  }, error => {
-    //    throwError(error);
-    //  })
-    //this.localStorage.clear('jwt');
-    //this.localStorage.clear('username');
-    //this.localStorage.clear('roles');
-    //this.localStorage.clear('privileges');
+    this.httpClient.post('api/auth/logout', null)
+      .subscribe(data => {
+        console.log(data);
+      }, error => {
+        throwError(error);
+      })
+    this.localStorage.clear('refreshToken');
+    this.localStorage.clear('jwt');
+    this.localStorage.clear('jwtExpireAt');
+    this.localStorage.clear('username');
+    this.localStorage.clear('roles');
+    this.localStorage.clear('privileges');
   }
 
   refresh(): Observable<any> {
     const refreshRequest = {
       token: this.getRefreshToken()
     }
-    return this.httpClient.post<LoginResponse>('api/auth/refresh', refreshRequest).pipe(tap(data => {
-        this.localStorage.clear('jwt');
-        this.localStorage.clear('username');
-        this.localStorage.store('roles', data.roles);
-        this.localStorage.store('privileges', data.privileges);
-      }));
+    return this.httpClient.post<LoginResponse>('api/auth/refresh', refreshRequest)
+      .pipe(
+        tap(data => {
+          const helper = new JwtHelperService();
+          const decoded = helper.decodeToken(data.jwt);
+          
+          this.localStorage.store('refreshToken', data.refreshToken)
+          this.localStorage.store('jwt', data.jwt);
+          this.localStorage.store('jwtExpireAt', decoded.exp);
+          this.localStorage.store('username', decoded.name);
+          this.localStorage.store('roles', decoded.roles);
+          this.localStorage.store('privileges', decoded.privileges);
+        })
+      );
   }
 }
