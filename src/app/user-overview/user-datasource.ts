@@ -6,9 +6,6 @@ import { catchError, finalize } from 'rxjs/operators';
 import { User } from '../data/user.payload';
 import { UserService } from '../user/user.service';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class UserDataSource implements DataSource<User> {
 
   private userSubject = new BehaviorSubject<User[]>([]);

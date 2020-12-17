@@ -28,7 +28,7 @@ export class AuthenticationService {
   }
 
   getJwtToken(): string {
-    return this.localStorage.retrieve('authenticationToken');
+    return this.localStorage.retrieve('jwt');
   }
 
   /**

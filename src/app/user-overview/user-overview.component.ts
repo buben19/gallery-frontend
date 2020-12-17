@@ -10,13 +10,15 @@ import { UserDataSource } from './user-datasource';
 })
 export class UserOverviewComponent implements OnInit {
 
+  dataSource = null;
+
   columnsToDisplay = ['id', 'firstName', 'lastName', 'login', 'email', 'created', 'enabled', 'rolesCount', 'privilegesCount'];
 
-  constructor(
-      public dataSource: UserDataSource) {
+  constructor(private userService: UserService) {
   }
 
   ngOnInit(): void {
+    this.dataSource = new UserDataSource(this.userService);
     this.dataSource.load();
   }
 }
