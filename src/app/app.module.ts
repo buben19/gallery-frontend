@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdministrationComponent } from './administration/administration.component';
 import { UserOverviewComponent } from './user-overview/user-overview.component';
 import {MatTableModule} from '@angular/material/table';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 export function tokenGetter(): string {
   return localStorage.getJwtToken();
@@ -38,6 +39,7 @@ export function tokenGetter(): string {
     NgxWebstorageModule.forRoot(),
     BrowserAnimationsModule,
     MatTableModule,
+    FontAwesomeModule,
   ],
   providers: [
     {
