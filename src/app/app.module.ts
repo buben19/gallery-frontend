@@ -11,6 +11,7 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
 import { TokenInterceptor } from './token-interceptor';
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
 import { JwtModule } from '@auth0/angular-jwt';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export function tokenGetter(): string {
   return localStorage.getJwtToken();
@@ -31,6 +32,7 @@ export function tokenGetter(): string {
     ReactiveFormsModule,
     FormsModule,
     NgxWebstorageModule.forRoot(),
+    BrowserAnimationsModule,
   ],
   providers: [
     {
