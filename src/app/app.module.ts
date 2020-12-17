@@ -10,8 +10,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { TokenInterceptor } from './token-interceptor';
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
-import { JwtModule } from '@auth0/angular-jwt';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AdministrationComponent } from './administration/administration.component';
+import { UserOverviewComponent } from './user-overview/user-overview.component';
+import {MatTableModule} from '@angular/material/table';
 
 export function tokenGetter(): string {
   return localStorage.getJwtToken();
@@ -23,6 +25,8 @@ export function tokenGetter(): string {
     LoginComponent,
     HomeComponent,
     NavigationBarComponent,
+    AdministrationComponent,
+    UserOverviewComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,6 +37,7 @@ export function tokenGetter(): string {
     FormsModule,
     NgxWebstorageModule.forRoot(),
     BrowserAnimationsModule,
+    MatTableModule,
   ],
   providers: [
     {
