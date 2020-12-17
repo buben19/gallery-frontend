@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { AuthenticationService } from '../authentication/authentication.service';
 
 @Component({
@@ -8,6 +9,7 @@ import { AuthenticationService } from '../authentication/authentication.service'
 })
 export class NavigationBarComponent implements OnInit {
 
+  faSignOutAlt = faSignOutAlt;
   loggedIn: boolean;
   username: string;
   admin: boolean;
@@ -22,5 +24,9 @@ export class NavigationBarComponent implements OnInit {
     this.loggedIn = this.authenticationService.isLoggedIn();
     this.username = this.authenticationService.getUsername();
     this.admin = this.authenticationService.hasRole('ROLE_ADMIN');
+  }
+
+  logout(): void {
+    this.authenticationService.logout();
   }
 }

@@ -26,6 +26,9 @@
           <li class="nav-item">
             <a class="nav-link" routerLink="/login">{{this.username}}<span class="sr-only">(current)</span></a>
           </li>
+          <button (click)="logout()" class="btn btn-outline-secondary">
+            <fa-icon [icon]="faSignOutAlt"></fa-icon>
+          </button>
         </ng-template>
       </ul>
     </div>

@@ -45,12 +45,11 @@ export class TokenInterceptor implements HttpInterceptor {
       this.refrehing = true;
       this.refreshTokenSubject.next(null);
 
-      return this.authenticationService.refresh()
-      .pipe(
+      return this.authenticationService.refresh().pipe(
         switchMap((refreshTokenResponse: LoginResponse) => {
           this.refrehing = false;
-          this.refreshTokenSubject.next(null);
-          return next.handle(this.addToken(req, null));
+          this.refreshTokenSubject.next(refreshTokenResponse.jwt);
+          return next.handle(this.addToken(req, refreshTokenResponse.jwt));
         })
       )
     } else {
