@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { AuthenticationService } from '../authentication/authentication.service';
 
@@ -14,19 +15,24 @@ export class NavigationBarComponent implements OnInit {
   username: string;
   admin: boolean;
 
-  constructor(private authenticationService: AuthenticationService) {
+  constructor(
+      private authenticationService: AuthenticationService, 
+      private router: Router) {
   }
 
   ngOnInit(): void {
-    this.authenticationService.loggedIn.subscribe((data: boolean) => this.loggedIn = data);
-    this.authenticationService.username.subscribe((data: string) => this.username = data);
-    this.authenticationService.roles.subscribe((data: string[]) => this.admin = data.indexOf('ROLE_ADMIN') > -1)
+    this.authenticationService.loggedIn.subscribe((data: boolean) => {
+      this.loggedIn = data;
+      this.username = this.authenticationService.getUsername();
+      this.admin = this.authenticationService.hasRole('ROLE_ADMIN');
+    });
     this.loggedIn = this.authenticationService.isLoggedIn();
     this.username = this.authenticationService.getUsername();
     this.admin = this.authenticationService.hasRole('ROLE_ADMIN');
   }
 
   logout(): void {
-    this.authenticationService.logout();
+    this.authenticationService.logout()
+      .subscribe(() => this.router.navigateByUrl("/"));
   }
 }

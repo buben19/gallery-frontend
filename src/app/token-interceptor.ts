@@ -13,7 +13,9 @@ export class TokenInterceptor implements HttpInterceptor {
   refrehing = false;
   refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject(null);
 
-  constructor(public authenticationService: AuthenticationService) { }
+  constructor(
+      public authenticationService: AuthenticationService) {
+  }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (req.url.indexOf('refresh') !== -1 || req.url.indexOf('login') !== -1) {
@@ -21,7 +23,7 @@ export class TokenInterceptor implements HttpInterceptor {
     }
 
     if (this.authenticationService.isJwtValid()) {
-      const jwtToken = this.authenticationService.getJwtToken();
+      const jwtToken = this.authenticationService.getJwt();
       if (jwtToken) {
         return next.handle(this.addToken(req, jwtToken))
           .pipe(
@@ -57,7 +59,7 @@ export class TokenInterceptor implements HttpInterceptor {
         filter(result => result !== null),
         take(1),
         switchMap((res) => {
-          return next.handle(this.addToken(req, this.authenticationService.getJwtToken()))
+          return next.handle(this.addToken(req, this.authenticationService.getJwt()))
         })
       );
     }
