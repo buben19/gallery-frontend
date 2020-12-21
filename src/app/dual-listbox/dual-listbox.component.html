@@ -1,0 +1,30 @@
+<div class="dual-listbox-container">
+  <div class="dual-listbox-items-container">
+    <span>Selected</span>
+    <mat-chip-list class="mat-chip-list-stacked" multiple>
+      <mat-chip 
+        *ngFor="let wrapper of selectedItems"
+        [selected]="wrapper.selected"
+        (click)="wrapper.toggle()">
+          {{presenter(wrapper.item)}}
+      </mat-chip>
+    </mat-chip-list>
+  </div>
+  <div class="dual-listbox-controls-container">
+    <button mat-button (click)="selectAllClicked()" class="dual-listbox-control-button"><fa-icon [icon]="faAngleDoubleLeft"></fa-icon></button>
+    <button mat-button (click)="selectClicked()" class="dual-listbox-control-button"><fa-icon [icon]="faAngleLeft"></fa-icon></button>
+    <button mat-button (click)="unselectClicked()" class="dual-listbox-control-button"><fa-icon [icon]="faAngleRight"></fa-icon></button>
+    <button mat-button (click)="unselectAllClicked()" class="dual-listbox-control-button"><fa-icon [icon]="faAngleDoubleRight"></fa-icon></button>
+  </div>
+  <div class="dual-listbox-items-container">
+    <span>Available</span>
+    <mat-chip-list class="mat-chip-list-stacked" multiple>
+      <mat-chip 
+        *ngFor="let wrapper of availableItems"
+        [selected]="wrapper.selected"
+        (click)="wrapper.toggle()">
+          {{presenter(wrapper.item)}}
+      </mat-chip>
+    </mat-chip-list>
+  </div>
+</div>

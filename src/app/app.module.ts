@@ -1,20 +1,23 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatTableModule } from '@angular/material/table';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxWebstorageModule } from 'ngx-webstorage';
+import { AdministrationComponent } from './administration/administration.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
+import { DualListboxComponent } from './dual-listbox/dual-listbox.component';
 import { HomeComponent } from './home/home.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxWebstorageModule } from 'ngx-webstorage';
-import { TokenInterceptor } from './token-interceptor';
+import { LoginComponent } from './login/login.component';
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AdministrationComponent } from './administration/administration.component';
+import { TokenInterceptor } from './token-interceptor';
 import { UserOverviewComponent } from './user-overview/user-overview.component';
-import {MatTableModule} from '@angular/material/table';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MatButtonModule } from '@angular/material/button';
 
 export function tokenGetter(): string {
   return localStorage.getJwtToken();
@@ -28,6 +31,7 @@ export function tokenGetter(): string {
     NavigationBarComponent,
     AdministrationComponent,
     UserOverviewComponent,
+    DualListboxComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,6 +44,8 @@ export function tokenGetter(): string {
     BrowserAnimationsModule,
     MatTableModule,
     FontAwesomeModule,
+    MatChipsModule,
+    MatButtonModule,
   ],
   providers: [
     {

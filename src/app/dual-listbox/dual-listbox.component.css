@@ -1,0 +1,17 @@
+.dual-listbox-container {
+  display: flex;
+}
+
+.dual-listbox-controls-container,
+.dual-listbox-items-container {
+  display: inline-block;
+  padding: 10px;
+}
+
+.dual-listbox-controls-container {
+  margin: auto 0;
+}
+
+.dual-listbox-control-button {
+  display: block;
+}
