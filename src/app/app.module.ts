@@ -1,6 +1,7 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,8 +17,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
 import { TokenInterceptor } from './token-interceptor';
-import { UserOverviewComponent } from './user-overview/user-overview.component';
-import { MatButtonModule } from '@angular/material/button';
+import { UserOverviewComponent } from './user/user-overview/user-overview.component';
 
 export function tokenGetter(): string {
   return localStorage.getJwtToken();

@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { User } from '../data/user.payload';
-import { UserService } from '../user/user.service';
+import { User } from 'src/app/data/user.payload';
+import { UserService } from '../user.service';
 import { UserDataSource } from './user-datasource';
 
 @Component({

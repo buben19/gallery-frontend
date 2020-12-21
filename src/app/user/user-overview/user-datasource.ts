@@ -1,10 +1,9 @@
 import { CollectionViewer } from '@angular/cdk/collections';
 import { DataSource } from "@angular/cdk/table";
-import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
-import { User } from '../data/user.payload';
-import { UserService } from '../user/user.service';
+import { finalize } from 'rxjs/operators';
+import { User } from 'src/app/data/user.payload';
+import { UserService } from '../user.service';
 
 export class UserDataSource implements DataSource<User> {
 
