@@ -6,6 +6,5 @@ export interface User {
   email: string;
   created: Date;
   enabled: boolean;
-  roles: string[];
-  privileges: string[];
+  roles: number[];
 }

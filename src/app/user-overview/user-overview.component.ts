@@ -30,7 +30,6 @@ export class UserOverviewComponent implements OnInit {
     {name: 'created', description: 'Created', get: user => user.created},
     {name: 'enabled', description: 'Enabled', get: user => user.enabled},
     {name: 'rolesCount', description: 'Roles', get: user => user.roles.length},
-    {name: 'privilegesCount', description: 'Privileges', get: user => user.privileges.length},
   ];
 
   get columnsToDisplay(): string[] {
