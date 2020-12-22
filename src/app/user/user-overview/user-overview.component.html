@@ -8,13 +8,7 @@
   <ng-container matColumnDef="expandedDetail">
     <td mat-cell *matCellDef="let user" [attr.colspan]="columnsToDisplay.length">
       <div class="user-detail" [@detailExpand]="user == expandedUser ? 'expanded' : 'collapsed'">
-        <div class="user-diagram">
-          <div>Id: {{user.id}}</div>
-          <div>{{user.login}}</div>
-          <div>{{user.email}}</div>
-          <div>{{user.roles}}</div>
-          <div>{{user.privileges}}</div>
-        </div>
+        <app-user-edit [user]="user"></app-user-edit>
       </div>
     </td>
   </ng-container>

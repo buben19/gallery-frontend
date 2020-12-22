@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { UserEditComponent } from '../user/user-edit/user-edit.component';
 
 @Component({
   selector: 'app-administration',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdministrationComponent implements OnInit {
 
-  constructor() { }
+  @ViewChild(UserEditComponent) editComponent: UserEditComponent;
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
+  onTest():void {
+    console.log(this.editComponent.getUser());
+  }
 }
