@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { User } from '../data/user.payload';
 import { UserEditComponent } from '../user/user-edit/user-edit.component';
 
 @Component({
@@ -8,15 +9,13 @@ import { UserEditComponent } from '../user/user-edit/user-edit.component';
 })
 export class AdministrationComponent implements OnInit {
 
-  @ViewChild(UserEditComponent) editComponent: UserEditComponent;
-
   constructor() {
   }
 
   ngOnInit(): void {
   }
 
-  onTest():void {
-    console.log(this.editComponent.getUser());
+  onUserChange(user: User) {
+    console.log(user);
   }
 }

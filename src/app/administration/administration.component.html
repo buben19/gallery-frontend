@@ -1,4 +1,2 @@
 <app-user-overview></app-user-overview>
-<app-user-edit></app-user-edit>
-
-<button mat-button (click)="onTest()">Test</button>
+<app-user-edit (userChanges)="onUserChange($event)"></app-user-edit>

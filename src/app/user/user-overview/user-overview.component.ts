@@ -18,7 +18,7 @@ import { UserDataSource } from './user-datasource';
 })
 export class UserOverviewComponent implements OnInit {
 
-  dataSource = null;
+  dataSource: UserDataSource = null;
   expandedUser: User | null;
 
   columns = [

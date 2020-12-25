@@ -1,40 +1,71 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CollectionViewer } from '@angular/cdk/collections';
+import { DataSource } from '@angular/cdk/table';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { faAngleDoubleLeft, faAngleDoubleRight, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { throwIfEmpty } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
+/**
+ * 
+ * @template T Item model type.
+ * @template S Item field type which can be compared to item model.
+ */
 @Component({
   selector: 'app-dual-listbox',
   templateUrl: './dual-listbox.component.html',
   styleUrls: ['./dual-listbox.component.css']
 })
-export class DualListboxComponent<T> implements OnInit {
+export class DualListboxComponent<T, S> implements OnInit, OnDestroy, CollectionViewer {
 
   faAngleDoubleLeft = faAngleDoubleLeft;
   faAngleLeft = faAngleLeft;
   faAngleRight = faAngleRight;
   faAngleDoubleRight = faAngleDoubleRight;
   
-  @Input() available: T[] = [];
-  @Input() selected: T[] = [];
+  @Input() itemDataSource: DataSource<T>;
+  @Input() selected: S[] | null;
 
   availableItems: ItemWrapper<T>[] = [];
   selectedItems: ItemWrapper<T>[] = [];
+
+  viewChange: BehaviorSubject<{start: number, end: number}> = 
+    new BehaviorSubject<{start: number, end: number}>({start: 0, end: Number.MAX_VALUE});
   
   /**
    * Callable which converts given object to string representation displayed in listbox.
    * 
-   * @param item 
+   * @param item Item which will be rendered.
    */
-  @Input() presenter: (item: T) => string = (item: T) => item.toString();
+  @Input() presenter: ListboxPresenter<T> = (item: T): string => item.toString();
+
+  @Input() comparator: ListboxItemComparator<T, S> = (item: T, selected: S): boolean => false;
   
-  @Output() itemSelected = new EventEmitter<T>();
+  @Output() selectionChanged: EventEmitter<T[]> = new EventEmitter<T[]>();
 
   constructor() {
   }
 
   ngOnInit(): void {
-    this.available.forEach((i: T) => this.availableItems.push(new ItemWrapper(i, false)));
-    this.selected.forEach((i: T) => this.selectedItems.push(new ItemWrapper(i, false)));
+    this.itemDataSource.connect(this)
+      .subscribe(data => data.forEach(i => {
+        let wrapper = new ItemWrapper(i, false);
+        let selected = false;
+        if (this.selected) {
+          this.selected.forEach(s => {
+            if (this.comparator(i, s)) {
+              this.selectedItems.push(wrapper);
+              selected = true;
+              this.selectionChanged.emit(this.selectedItems.map(selected => selected.item));
+            }
+          });
+        }
+        if (!selected) {
+          this.availableItems.push(wrapper);
+        }
+      }));
+  }
+
+  ngOnDestroy(): void {
+    this.itemDataSource.disconnect(this);
   }
 
   selectClicked(): void {
@@ -43,6 +74,7 @@ export class DualListboxComponent<T> implements OnInit {
       i.selected = false;
       this.selectedItems.push(i);
     });
+    this.selectionChanged.emit(this.selectedItems.map(selected => selected.item));
   }
 
   unselectClicked(): void {
@@ -51,6 +83,7 @@ export class DualListboxComponent<T> implements OnInit {
       i.selected = false;
       this.availableItems.push(i);
     });
+    this.selectionChanged.emit(this.selectedItems.map(selected => selected.item));
   }
 
   selectAllClicked(): void {
@@ -59,6 +92,7 @@ export class DualListboxComponent<T> implements OnInit {
       this.selectedItems.push(i);
     });
     this.availableItems.splice(0);
+    this.selectionChanged.emit(this.selectedItems.map(selected => selected.item));
   }
 
   unselectAllClicked(): void {
@@ -67,6 +101,7 @@ export class DualListboxComponent<T> implements OnInit {
       this.availableItems.push(i);
     });
     this.selectedItems.splice(0);
+    this.selectionChanged.emit(this.selectedItems.map(selected => selected.item));
   }
 }
 
@@ -80,4 +115,14 @@ class ItemWrapper<T> {
   toggle(): void {
     this.selected = !this.selected;
   }
+}
+
+export interface ListboxPresenter<T> {
+
+  (item: T): string;
+}
+
+export interface ListboxItemComparator<T, S> {
+
+  (item: T, selected: S): boolean;
 }

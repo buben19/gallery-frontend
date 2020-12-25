@@ -29,9 +29,9 @@
     </div>
   </div>
   <div class="row">
-    <mat-slide-toggle>With Password</mat-slide-toggle>
+    <mat-slide-toggle ([ngModel])="withPassword" (change)="withPassword = !withPassword">With Password</mat-slide-toggle>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="withPassword">
     <div class="col">
       <mat-form-field>
         <mat-label>Password</mat-label>
@@ -51,10 +51,10 @@
   </div>
 
   <div class="row">
-    <mat-slide-toggle>Create Now</mat-slide-toggle>
+    <mat-slide-toggle ([ngModel])="createNow" (change)="createNow = !createNow">Create Now</mat-slide-toggle>
   </div>
 
-  <div class="row">
+  <div class="row" *ngIf="!createNow">
     <div class="col">
       <mat-form-field appearance="fill">
         <mat-label>Choose a date</mat-label>
@@ -70,6 +70,11 @@
   </div>
 
   <div class="row">
-    <app-dual-listbox></app-dual-listbox>
+    <app-dual-listbox 
+      [itemDataSource]="roleDataSource"
+      [selected]="user.roles"
+      [presenter]="rolePresenter"
+      [comparator]="roleComparator"
+      (selectionChanged)="roleSelectionChanged($event)"></app-dual-listbox>
   </div>
 </form>
