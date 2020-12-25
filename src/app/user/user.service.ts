@@ -13,6 +13,14 @@ export class UserService {
   }
 
   getAll(): Observable<User[]> {
-    return this.http.get<User[]>('/api/users');
+    return this.http.get<User[]>('api/users');
+  }
+
+  create(user: User): Observable<number> {
+    return this.http.post<number>('api/users', user);
+  }
+
+  update(id: number, user: User): Observable<any> {
+    return this.http.put('api/users/' + id, user);
   }
 }
