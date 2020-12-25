@@ -25,6 +25,8 @@ import { NavigationBarComponent } from './navigation-bar/navigation-bar.componen
 import { TokenInterceptor } from './token-interceptor';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { UserOverviewComponent } from './user/user-overview/user-overview.component';
+import { UserCreateComponent } from './user/user-create/user-create.component';
+import { UserModifyComponent } from './user/user-modify/user-modify.component';
 
 export function tokenGetter(): string {
   return localStorage.getJwtToken();
@@ -40,6 +42,8 @@ export function tokenGetter(): string {
     UserOverviewComponent,
     DualListboxComponent,
     UserEditComponent,
+    UserCreateComponent,
+    UserModifyComponent,
   ],
   imports: [
     BrowserModule,

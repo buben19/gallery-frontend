@@ -1,0 +1,5 @@
+<app-user-edit 
+  [user]="user" 
+  (userChanges)="userChanges($event)" 
+  (userCreatable)="userCreatableChanges($event)"></app-user-edit>
+<button mat-flat-button color="primary" [disabled]="!userCreatable" (click)="create()">Create</button>

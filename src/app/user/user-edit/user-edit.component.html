@@ -18,31 +18,38 @@
     <div class="col">
       <mat-form-field>
         <mat-label>Login</mat-label>
-        <input matInput type="text" formControlName="login">
+        <input matInput type="text" formControlName="login" required>
       </mat-form-field>
     </div>
     <div class="col">
       <mat-form-field>
         <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="email">
+        <input matInput type="email" formControlName="email" required>
       </mat-form-field>
     </div>
   </div>
   <div class="row">
-    <mat-slide-toggle ([ngModel])="withPassword" (change)="withPassword = !withPassword">With Password</mat-slide-toggle>
+    <mat-slide-toggle formControlName="withPassword">With Password</mat-slide-toggle>
   </div>
-  <div class="row" *ngIf="withPassword">
-    <div class="col">
-      <mat-form-field>
-        <mat-label>Password</mat-label>
-        <input matInput type="password" formControlName="password">
-      </mat-form-field>
+  <div *ngIf="userForm.value.withPassword">
+    <div class="row">
+      <div class="col">
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" required>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field>
+          <mat-label>Confirm Password</mat-label>
+          <input matInput type="password" formControlName="confirmPassword" required>
+        </mat-form-field>
+      </div>
     </div>
-    <div class="col">
-      <mat-form-field>
-        <mat-label>Confirm Password</mat-label>
-        <input matInput type="password" formControlName="confirmPassword">
-      </mat-form-field>
+    <div class="row" *ngIf="userForm.errors && userForm.errors.password">
+      <p *ngIf="userForm.errors.password.passwordIsEmpty">Password must be set.</p>
+      <p *ngIf="userForm.errors.password.confirmPasswordIsEmpty">Confirm password must be set.</p>
+      <p *ngIf="userForm.errors.password.passwordDontMatch">Password don't match.</p>
     </div>
   </div>
 

@@ -14,8 +14,4 @@ export class AdministrationComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
-  onUserChange(user: User) {
-    console.log(user);
-  }
 }

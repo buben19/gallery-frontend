@@ -18,8 +18,8 @@ export class UserEditComponent implements OnInit {
 
   @Input() user: User = {} as User;
   @Output() userChanges: EventEmitter<User> = new EventEmitter<User>();
+  @Output() userCreatable: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  withPassword: boolean = false;
   createNow: boolean = true;
   valid: boolean = false;
 
@@ -39,22 +39,29 @@ export class UserEditComponent implements OnInit {
       firstName: [this.user.firstName],
       lastName: [this.user.lastName],
       login: [this.user.login, Validators.required],
+      withPassword: [this.user.password ? true : false],
       password: [this.user.password],
       confirmPassword: [this.user.password],
-      email: [this.user.email],
+      email: [this.user.email, Validators.required],
       created: [this.user.created],
       enabled: [this.user.enabled],
-      roles: [this.user.roles],
+      roles: [this.user.roles ? this.user.roles : []],
     }, {validators: this.passwordValidator});
     this.userForm.statusChanges.subscribe(status => this.statusChanges(status));
     this.roleDataSource.load();
   }
 
   passwordValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
-    if (this.withPassword) {
-      const password = control.get('password');
-      const confirmPassword = control.get('confirmPassword');
-      return password && confirmPassword && password.value === confirmPassword.value ? null : {passwordDontMatch: true};
+    if (control.get('withPassword').value) {
+      let password = control.get('password');
+      let confirmPassword = control.get('confirmPassword');
+      if (!password.value) {
+        return {password: {passwordIsEmpty: true}};
+      } else if (!confirmPassword.value) {
+        return {password: {confirmPasswordIsEmpty: true}};
+      } else {
+        return password.value === confirmPassword.value ? null : {password: {passwordDontMatch: true}};
+      }
     } else {
       return null;
     }
@@ -70,6 +77,7 @@ export class UserEditComponent implements OnInit {
 
   statusChanges(status: string): void {
     this.valid = status === 'VALID';
+    this.userCreatable.emit(this.valid);
     if (this.valid) {
       this.dataChanges(this.userForm.value);
     }
@@ -89,7 +97,7 @@ export class UserEditComponent implements OnInit {
       lastName: userData.lastName,
       login: userData.login,
       email: userData.email,
-      password: this.withPassword ? userData.password : null,
+      password: userData.withPassword ? userData.password : null,
       created: this.createNow ? new Date() : userData.created,
       enabled: userData.enabled,
       roles: userData.roles,
